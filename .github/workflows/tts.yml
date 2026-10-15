@@ -2,31 +2,27 @@ YAML
 name: Generate Bible TTS
 
 on:
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
-  build:
+  run-tts:
     runs-on: ubuntu-latest
-
     steps:
-    - name: 소스코드 체크아웃
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: 파이썬 설정
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: 라이브러리 설치
-      run: |
-        pip install --upgrade pip
-        pip install -r requirements.txt
+      - run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: 파이썬 스크립트 실행 (음성 생성)
-      run: python bible_tts.py
+      - run: python bible_tts.py
 
-    - name: 생성된 음성 파일 업로드 (아티팩트)
-      uses: actions/upload-artifact@v4
-      with:
-        name: bible-audio
-        path: bible_output.mp3
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bible-audio
+          path: bible_output.mp3
